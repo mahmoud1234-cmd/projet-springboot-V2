@@ -1,21 +1,17 @@
 package tn.twin5.controlles;
 
-import org.springframework.http.ResponseEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import tn.twin5.entities.ProjectDetails;
 import tn.twin5.services.IProjectDetailsServices;
 
 import java.util.List;
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("projectdetails")
 @CrossOrigin("*")
 public class ProjectDetailsRestController {
     private final IProjectDetailsServices projectDetailsServices;
-
-    public ProjectDetailsRestController(IProjectDetailsServices projectDetailsServices) {
-        this.projectDetailsServices = projectDetailsServices;
-    }
 
     @PostMapping("add")
     public ProjectDetails addProjectDetails(@RequestBody ProjectDetails details) {

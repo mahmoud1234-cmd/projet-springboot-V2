@@ -33,6 +33,8 @@ public class AIServiceImpl implements AISystemsServices {
         iaSystemsRepository.delete(aiSystems);
     }
 
+
+
     @Override
     public AISystems findById(Long id) {
         return iaSystemsRepository.findById(id).orElse(null);

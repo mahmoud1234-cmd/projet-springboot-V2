@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import tn.twin5.entities.Projects;
 import tn.twin5.services.IProjectsServices;
 
+import java.time.LocalDate;
 import java.util.List;
 @AllArgsConstructor
 @RestController
@@ -40,8 +41,16 @@ public class ProjectsRestController {
 
     @PostMapping("assignToProject/{agentId}")
     public Projects assignToProject(@PathVariable Long agentId, @RequestBody Projects project) {
-        return projectsServices.assignAgentToProject(project, agentId);
+        return projectsServices.assignAgentToProject(project, agentId);}
 
+        @GetMapping("/ExpiredProjects")
+        public List<Projects> getExpiredProjects() {
+            return projectsServices.getExpiredProjects();
+        }
 
+        @GetMapping("/getProjectByCriteria")
+        public List<Projects> getProjectByCriteria (LocalDate start, LocalDate end) {
+            return projectsServices.getProjectsByCriteria(start,end);
+        }
     }
-}
+

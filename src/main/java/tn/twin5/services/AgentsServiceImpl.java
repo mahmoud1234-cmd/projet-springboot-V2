@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import tn.twin5.entities.Agents;
 import java.util.List;
+import java.util.Set;
+
+import tn.twin5.entities.enums.Skills;
 import tn.twin5.repositories.IAgentsRepository;
 
 @Service
@@ -43,4 +46,28 @@ public class AgentsServiceImpl implements IAgentsServices {
         return (List<Agents>) agentsRepository.findAll();
     }
 
+    @Override
+    public List<Agents> findAvailableAgents() {
+        return ((List<Agents>) agentsRepository.findAll())
+                .stream()
+                .filter(Agents::getAvailable)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Agents> findAgentsBySkill(tn.twin5.entities.enums.Skills skill) {
+        return ((List<Agents>) agentsRepository.findAll())
+                .stream()
+                .filter(agent -> agent.getSkills() != null && agent.getSkills().contains(skill))
+                .collect(java.util.stream.Collectors.toList());
+    }
+
+    @Override
+    public List<Agents> findAvailableAgentsWithSkills(Set<Skills> requiredSkills) {
+        return ((List<Agents>) agentsRepository.findAll())
+                .stream()
+                .filter(agent -> agent.getAvailable() != null && agent.getAvailable())
+                .filter(agent -> agent.getSkills() != null && agent.getSkills().containsAll(requiredSkills))
+                .collect(java.util.stream.Collectors.toList());
+    }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public interface IAgentsRepository extends CrudRepository<Agents, Long> {
 
     @Query("SELECT a FROM Agents a WHERE a.available = true")
-    List<Agents> findByAvailableTrue();  // remplace la méthode dérivée
+    List<Agents> findByAvailableTrue();
 
     @Query("""
             SELECT DISTINCT a
@@ -20,7 +20,7 @@ public interface IAgentsRepository extends CrudRepository<Agents, Long> {
             WHERE a.available = true
               AND s IN :skills
             """)
-    List<Agents> findByAvailableTrueAndSkillsIn(@Param("skills") List<Skills> skills); // remplace dérivée
+    List<Agents> findByAvailableTrueAndSkillsIn(@Param("skills") List<Skills> skills);
 
     @Query("""
             SELECT DISTINCT a

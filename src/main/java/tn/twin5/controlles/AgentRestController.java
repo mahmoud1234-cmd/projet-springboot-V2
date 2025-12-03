@@ -1,12 +1,11 @@
 package tn.twin5.controlles;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.twin5.entities.Agents;
 import tn.twin5.entities.enums.Skills;
 import tn.twin5.services.IAgentsServices;
 
 import java.util.List;
-import java.util.Set;
 @RestController
 @RequestMapping("agents")
 @CrossOrigin(origins = "*")
@@ -18,42 +17,52 @@ public class AgentRestController {
     }
 
     @PostMapping("add")
-    public Agents addAgent(@RequestBody Agents agent) {
-        return agentsServices.addAgents(agent);
+    public ResponseEntity<Agents> addAgent(@RequestBody Agents agent) {
+        return ResponseEntity.ok(agentsServices.addAgents(agent));
     }
 
     @GetMapping("getagent")
-    public List<Agents> getAgents() {
-        return agentsServices.findAll();
+    public ResponseEntity<List<Agents>> getAgents() {
+        return ResponseEntity.ok(agentsServices.findAll());
     }
 
     @GetMapping("/{id}")
-    public Agents getAgentById(@PathVariable Long id) {
-        return agentsServices.findById(id);
+    public ResponseEntity<Agents> getAgentById(@PathVariable Long id) {
+        return ResponseEntity.ok(agentsServices.findById(id));
     }
 
-    @PutMapping("update")
-    public Agents updateAgent(@RequestBody Agents agent) {
-        return agentsServices.updateAgents(agent);
+    @PutMapping("/{id}")
+    public ResponseEntity<Agents> updateAgent(@PathVariable Long id, @RequestBody Agents agent) {
+        return ResponseEntity.ok(agentsServices.updateAgents(agent));
     }
 
-    @DeleteMapping("delete")
-    public void deleteAgent(@RequestBody Agents agent) {
-        agentsServices.deleteAgents(agent);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Agents> deleteAgent(@PathVariable Long id) {
+        agentsServices.deleteAgents(agentsServices.findById(id));
+        return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/available")
+    public ResponseEntity<List<Agents>> getAvailableAgents(
+            @RequestParam(required = false) List<Skills> skills) {
+
+        return ResponseEntity.ok(agentsServices.getAvailableAgentsWithSkills(skills));
     }
 
-    @GetMapping("available")
-    public List<Agents> getAvailableAgents() {
-        return agentsServices.findAvailableAgents();
+    // AgentRestController.java  ← Ajoute cette méthode (garde l’autre qui existe déjà)
+
+
+
+
+    @GetMapping("/chercherskill")
+    public ResponseEntity<List<Agents>> getChercherSkills(
+
+            @RequestParam("skill") Skills skill) {
+
+        return ResponseEntity.ok(agentsServices.findAgentsBySkills(skill));
     }
 
-    @GetMapping("by-skill/{skill}")
-    public List<Agents> getAgentsBySkill(@PathVariable Skills skill) {
-        return agentsServices.findAgentsBySkill(skill);
-    }
 
-    @PostMapping("available-with-skills")
-    public List<Agents> getAvailableAgentsWithSkills(@RequestBody Set<Skills> requiredSkills) {
-        return agentsServices.findAvailableAgentsWithSkills(requiredSkills);
-    }
+
+
 }
+

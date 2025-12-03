@@ -8,7 +8,7 @@ import tn.twin5.entities.Projects;
 import tn.twin5.repositories.IAgentsRepository;
 import tn.twin5.repositories.IProjectdRepository;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -44,22 +44,19 @@ public class ProjectsServiceImpl implements IProjectsServices {
     public List<Projects> findAll() {
         return (List<Projects>) projectdRepository.findAll();
     }
-    @Override
-    public List<Projects> getExpiredProjects() {
-        return projectdRepository.findByEndDateBefore(LocalDate.now());
 
-    }
-
-        @Override
-        public List<Projects> getProjectsByCriteria(LocalDate start, LocalDate end) {
-            return projectdRepository.findByStartDateLessThanEqualAndEndDateGreaterThanEqual(start, end);
-
-        }
     @Override
     public Projects assignAgentToProject(Projects project, Long id) {
         Agents agent = agentsRepository.findById(id).orElse(null);
         project.getAgents().add(agent);
         return projectdRepository.save(project);
 
+    }
+
+    @Override
+    public List<Projects> getExpiredProjects() {
+
+
+        return projectdRepository.findByEndDateAfter(new Date()) ;
     }
 }

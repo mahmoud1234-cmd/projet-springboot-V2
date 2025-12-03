@@ -1,3 +1,4 @@
+// Calls.java (corrigé et complété)
 package tn.twin5.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,29 +19,30 @@ import java.util.Set;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-//@Table(name = "t_calls")
 public class Calls implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long callsId;
-     LocalDateTime callTime;
-    // @Column(nullable = false)
-     String callerNumber;
+    Long callsId;
+
+    LocalDateTime callTime;
+
+    String callerNumber;
 
     @ElementCollection(targetClass = Skills.class)
     @Enumerated(EnumType.STRING)
-     Set<Skills> requiredSkills;
+    @CollectionTable(name = "call_required_skills")
+    Set<Skills> requiredSkills;
+
     @Enumerated(EnumType.STRING)
-    CallStatus status;
+    CallStatus status = CallStatus.ON_HOLD;
 
     @ManyToOne
     @JsonIgnore
     @ToString.Exclude
-    private AISystems assignedAISystems;
+    AISystems assignedAISystems;
 
-    @ManyToOne(cascade =CascadeType.PERSIST)
-    //@JsonIgnore
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @ToString.Exclude
-    private Agents assignedAgent;
-
+    Agents assignedAgent;
 }

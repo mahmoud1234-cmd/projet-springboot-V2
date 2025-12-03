@@ -1,4 +1,6 @@
+// AISystems.java (corrigé : ajout du compteur + available par défaut)
 package tn.twin5.entities;
+
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -11,21 +13,27 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-
 public class AISystems {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long aiSystemId;
-    private String type;
-    private Boolean available;
+    Long aiSystemId;
+
+    String type;
+
+    Boolean available = true;  // important : Boolean → true par défaut
+
+    Integer currentCallCount = 0;  // AJOUT OBLIGATOIRE pour Q.2
+
+    Integer maxConcurrentCalls = 2; // AJOUT OBLIGATOIRE
+
     @ElementCollection(targetClass = Skills.class)
     @Enumerated(EnumType.STRING)
-    private Set<Skills> Skills;
+    Set<Skills> Skills;
 
     @OneToMany(mappedBy = "assignedAISystems")
-    private List<Calls> aiCalls;
-
+    List<Calls> aiCalls;
 }
